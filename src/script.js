@@ -13,17 +13,40 @@ const canvas = document.querySelector('canvas.webgl')
 const scene = new THREE.Scene()
 
 // Objects
-const geometry = new THREE.TorusGeometry( .7, .2, 16, 100 );
+var geometry = new THREE.TorusGeometry( .7, .2, 16, 100 );
 
 // Materials
 
 const material = new THREE.MeshBasicMaterial()
 material.color = new THREE.Color(0xff0000)
-
 // Mesh
-const sphere = new THREE.Mesh(geometry,material)
-scene.add(sphere)
+var sphere = new THREE.Mesh(geometry,material)
+var material1=new THREE.MeshBasicMaterial()
+var geometry1 = new THREE.TorusGeometry( .5, .2, 16, 100 );
 
+
+
+
+for(var i=-1.5;i<2.5;i+=0.25){
+    addTunle(i);
+}
+
+
+function addTunle(place){
+    if(place%0.5==0){
+        material1.color = new THREE.Color(0xfff000)
+        sphere = new THREE.Mesh(geometry1,material1)
+        sphere.rotation.y= 5
+        sphere.position.set(place,0,0)
+        scene.add(sphere)
+    }
+    else{
+        sphere = new THREE.Mesh(geometry,material)
+        sphere.rotation.y= 5
+        sphere.position.set(place,0,0)
+        scene.add(sphere)
+    }
+}
 // Lights
 
 const pointLight = new THREE.PointLight(0xffffff, 0.1)
@@ -56,20 +79,6 @@ window.addEventListener('resize', () =>
 })
 
 /**
- * Camera
- */
-// Base camera
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.x = 0
-camera.position.y = 0
-camera.position.z = 2
-scene.add(camera)
-
-// Controls
-// const controls = new OrbitControls(camera, canvas)
-// controls.enableDamping = true
-
-/**
  * Renderer
  */
 const renderer = new THREE.WebGLRenderer({
@@ -77,11 +86,84 @@ const renderer = new THREE.WebGLRenderer({
 })
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+/**
+ * Camera
+ */
+// Base camera
+var camera = new THREE.PerspectiveCamera( 25, window.innerWidth / window.innerHeight, 1, 200 );
+var controls = new OrbitControls(camera, renderer.domElement);
+camera.position.set(0,0,2)
+scene.add(camera)
+renderer.render(scene,camera)
+
+// Controls
+// const controls = new OrbitControls(camera, canvas)
+// controls.enableDamping = true
+
+
+
+addEventListener("keydown",position=>{
+    console.log(position.code)
+    switch(position.code){
+        case "KeyW":
+            console.log("hi")
+            camera.position.z -=0.1
+            break;
+        case "KeyS":
+            camera.position.z +=0.1
+            break;
+        case "KeyA":
+            camera.position.x-=0.1
+            break;
+        case "KeyD":
+            camera.position.x+=0.1
+            break;
+    
+        case "ArrowUp":
+            camera.rotation.x+=0.05
+            break;
+        case "ArrowDown":
+            camera.rotation.x-=0.05
+            break;
+        case "ArrowLeft":
+            camera.rotation.y+=0.05
+            break;
+        case "ArrowRight":
+            camera.rotation.y-=0.05
+            break;
+    }
+   
+    console.log(camera.position.z)
+    renderer.render(scene,camera)
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /**
  * Animate
  */
-
+/*
 const clock = new THREE.Clock()
 
 const tick = () =>
@@ -103,3 +185,4 @@ const tick = () =>
 }
 
 tick()
+*/
