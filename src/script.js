@@ -92,11 +92,13 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
 var controls =new FirstPersonControls(camera, renderer.domElement);
 controls.lookSpeed=0.3;
+controls.movementSpeed=2.0;
 renderer.render(scene,camera)
 
 
-
-
+canvas.addEventListener("keyDown",(event)=>{
+    console.log(event.code)
+})
 
 
 
