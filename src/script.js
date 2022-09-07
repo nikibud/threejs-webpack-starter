@@ -1,6 +1,6 @@
 import './style.css'
 import * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonControls.js'
 import * as dat from 'dat.gui'
 
 // Debug
@@ -25,7 +25,9 @@ var material1=new THREE.MeshBasicMaterial()
 var geometry1 = new THREE.TorusGeometry( .5, .2, 16, 100 );
 
 
-
+var camera = new THREE.PerspectiveCamera( 25, window.innerWidth / window.innerHeight, 1, 200 );
+camera.position.set(0,0,2)
+scene.add(camera)
 
 for(var i=-1.5;i<2.5;i+=0.25){
     addTunle(i);
@@ -86,71 +88,11 @@ const renderer = new THREE.WebGLRenderer({
 })
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-/**
- * Camera
- */
-// Base camera
-var camera = new THREE.PerspectiveCamera( 25, window.innerWidth / window.innerHeight, 1, 200 );
-var controls = new OrbitControls(camera, renderer.domElement);
-camera.position.set(0,0,2)
-scene.add(camera)
+
+
+var controls =new FirstPersonControls(camera, renderer.domElement);
+controls.lookSpeed=0.3;
 renderer.render(scene,camera)
-
-// Controls
-// const controls = new OrbitControls(camera, canvas)
-// controls.enableDamping = true
-
-
-
-addEventListener("keydown",position=>{
-    console.log(position.code)
-    switch(position.code){
-        case "KeyW":
-            console.log("hi")
-            camera.position.z -=0.1
-            break;
-        case "KeyS":
-            camera.position.z +=0.1
-            break;
-        case "KeyA":
-            camera.position.x-=0.1
-            break;
-        case "KeyD":
-            camera.position.x+=0.1
-            break;
-    
-        case "ArrowUp":
-            camera.rotation.x+=0.05
-            break;
-        case "ArrowDown":
-            camera.rotation.x-=0.05
-            break;
-        case "ArrowLeft":
-            camera.rotation.y+=0.05
-            break;
-        case "ArrowRight":
-            camera.rotation.y-=0.05
-            break;
-    }
-   
-    console.log(camera.position.z)
-    renderer.render(scene,camera)
-})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -163,20 +105,17 @@ addEventListener("keydown",position=>{
 /**
  * Animate
  */
-/*
+
 const clock = new THREE.Clock()
 
 const tick = () =>
 {
 
-    const elapsedTime = clock.getElapsedTime()
-
-    // Update objects
-    sphere.rotation.y = .5 * elapsedTime
+    
 
     // Update Orbital Controls
     // controls.update()
-
+    controls.update( clock.getDelta() );
     // Render
     renderer.render(scene, camera)
 
@@ -185,4 +124,3 @@ const tick = () =>
 }
 
 tick()
-*/
