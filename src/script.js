@@ -149,3 +149,16 @@ tick()
 
 
 //FIREBASE WORKPLACE    
+import {initializeApp } from 'firebase/app'
+import { getDatabase } from "firebase/database";
+
+const firebaseConfig = {
+    databaseURL: "https://cavecar-f1011-default-rtdb.europe-west1.firebasedatabase.app/"
+}
+const app  = initializeApp(firebaseConfig);
+
+
+// Initialize Realtime Database and get a reference to the service
+const database = getDatabase(app);
+
+console.log(database);
