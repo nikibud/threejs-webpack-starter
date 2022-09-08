@@ -96,9 +96,6 @@ controls.movementSpeed=2.0;
 renderer.render(scene,camera)
 
 
-canvas.addEventListener("keyDown",(event)=>{
-    console.log(event.code)
-})
 
 
 
