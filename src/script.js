@@ -149,16 +149,39 @@ tick()
 
 
 //FIREBASE WORKPLACE    
-import {initializeApp } from 'firebase/app'
-import { getDatabase } from "firebase/database";
+import { initializeApp } from "firebase/app";
+import { getFirestore, queryEqual, exists, data } from "firebase/firestore";
 
-const firebaseConfig = {
-    databaseURL: "https://cavecar-f1011-default-rtdb.europe-west1.firebasedatabase.app/"
+// TODO: Replace the following with your app's Firebase project configuration
+// See: https://firebase.google.com/docs/web/learn-more#config-object
+const firebaseConfig = { 
+    apiKey: "AIzaSyDHZtE49cI69kCQa-tyw6XlAPHfRf0jiYw",
+    authDomain: "cavecar-f1011.firebaseapp.com",
+    databaseURL: "https://cavecar-f1011-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "cavecar-f1011",
+    storageBucket: "cavecar-f1011.appspot.com",
+    messagingSenderId: "465966621561",
+    appId: "1:465966621561:web:26a21fb466d53acf6fc5a8",
+    measurementId: "G-2DQE9E60FM"
 }
-const app  = initializeApp(firebaseConfig);
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 
 
-// Initialize Realtime Database and get a reference to the service
-const database = getDatabase(app);
+// Initialize Cloud Firestore and get a reference to the service
+const db = getFirestore(app);
 
-console.log(database);
+import { collection, getDocs } from "firebase/firestore"; 
+
+const querySnapshot =  getDocs(collection(db, "users"))
+.then((snapshot)=>{
+    let users=[]
+    snapshot.docs.forEach((doc)=>{
+        users.push({ ...doc.data(),id: doc.id})
+    })
+    console.log(users)
+})
+.catch((error)=>{
+    console.log("the error is: " + error)
+});
