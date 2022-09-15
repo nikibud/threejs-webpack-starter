@@ -25,6 +25,9 @@ var material1=new THREE.MeshBasicMaterial()
 var geometry1 = new THREE.TorusGeometry( .5, .2, 16, 100 );
 
 
+dat.GUI.toggleHide()
+
+
 var camera = new THREE.PerspectiveCamera( 25, window.innerWidth / window.innerHeight, 1, 200 );
 camera.position.set(0,0,2)
 scene.add(camera)
@@ -61,18 +64,18 @@ scene.add(pointLight)
  * Sizes
  */
 const sizes = {
-    width: window.innerWidth,
-    height: window.innerHeight
+    width: window.innerWidth/2,
+    height: window.innerHeight/2
 }
 
 window.addEventListener('resize', () =>
 {
     // Update sizes
-    sizes.width = window.innerWidth
-    sizes.height = window.innerHeight
+    sizes.width = window.innerWidth/2
+    sizes.height = window.innerHeight/2
 
     // Update camera
-    camera.aspect = sizes.width / sizes.height
+    camera.aspect = sizes.width / sizes.height/2
     camera.updateProjectionMatrix()
 
     // Update renderer
@@ -114,7 +117,9 @@ const tick = () =>
 
     // Update Orbital Controls
     // controls.update()
+    
     controls.update( clock.getDelta() );
+    
     // Render
     renderer.render(scene, camera)
 
