@@ -32,6 +32,11 @@ var camera = new THREE.PerspectiveCamera( 25, window.innerWidth / window.innerHe
 camera.position.set(0,0,2)
 scene.add(camera)
 
+
+
+
+
+
 for(var i=-1.5;i<50;i+=0.25){
     addTunle(i);
 }
