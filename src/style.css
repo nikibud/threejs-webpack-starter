@@ -13,11 +13,16 @@ body
 
 .webgl
 {
-    margin-top: 20%;
-    margin-left: 20%;
+    
     position: fixed;
-    top: 0;
-    left: 0;
+    top: 30%;
+    left: 23%;
     outline: none;
 }
 
+body {
+    background-image: url("/src/img/background.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
