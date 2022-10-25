@@ -36,10 +36,12 @@ scene.add(camera)
 
 
 
-
-for(var i=-1.5;i<50;i+=0.25){
-    addTunle(i);
+function buildTunle(map){
+    for(var i=-1.5;i<50;i+=0.25){
+        addTunle(i);
+    }
 }
+
 
 
 function addTunle(place){
