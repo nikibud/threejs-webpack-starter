@@ -31,6 +31,10 @@ module.exports = {
             filename:'car.html',
             template: path.resolve(__dirname, '../src/car.html'),
         }),
+        new HtmlWebpackPlugin({
+            filename:'login.html',
+            template: path.resolve(__dirname, '../src/login.html'),
+        }),
         new MiniCSSExtractPlugin()
     ],
     module:
