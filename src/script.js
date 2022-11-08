@@ -184,16 +184,62 @@ const app = initializeApp(firebaseConfig);
 // Initialize Cloud Firestore and get a reference to the service
 const db = getFirestore(app);
 
-import { collection, getDocs } from "firebase/firestore"; 
+import { collection, getDocs , addDoc} from "firebase/firestore"; 
 
-const querySnapshot =  getDocs(collection(db, "users"))
-.then((snapshot)=>{
-    let users=[]
-    snapshot.docs.forEach((doc)=>{
-        users.push({ ...doc.data(),id: doc.id})
+let users=[]
+
+//userinput
+let username="test"
+let password="1234"
+
+
+
+function checkUser(username,password){ 
+    getDocs(collection(db, "users"))
+    .then((snapshot)=>{
+        users=[]
+        snapshot.docs.forEach((doc)=>{
+            users.push({ ...doc.data(),id: doc.id})
+        })
+        for(let i=0;i<users.length;i++){
+            if(users[i].name==username && users[i].password==password)    
+                return true
+        }
     })
-    console.log(users)
-})
-.catch((error)=>{
-    console.log("the error is: " + error)
-});
+    .catch((error)=>{
+        console.log("the error is: " + error)
+    });
+}
+
+if(checkUser(username,password)){
+    console.log("hi")
+}
+else{
+    try {
+        const docRef = addDoc(collection(db, "users"), {
+          name: username,
+          password: password,
+        });
+        console.log("Document written with ID: ", docRef.id);
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
+}
+
+
+printUsers()
+
+
+function printUsers(){
+    getDocs(collection(db, "users"))
+    .then((snapshot)=>{
+        users=[]
+        snapshot.docs.forEach((doc)=>{
+            users.push({ ...doc.data(),id: doc.id})
+        })
+        console.log(users)
+    })
+    .catch((error)=>{
+        console.log("the error is: " + error)
+    });
+}
