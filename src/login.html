@@ -30,7 +30,7 @@
                     </ul>
                 </div>
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="nav-item " id="login">
+                    <li class="nav-item ">
                         <a class="nav-link active pull-right " aria-current="page" href="login.html">login</a>
                     </li>
                 </ul>
@@ -38,7 +38,7 @@
         </div>
         
 
-        <div class="container text-center w-75 mt-4 bg-dark">
+        <div class="container text-center w-75 mt-4 bg-dark" id="login">
             <h1 class="text-light">login</h1>
             <br>
             <p class="text-light d-inline border border-light p-1">username</p>
@@ -48,28 +48,29 @@
             <p class="text-light d-inline border border-light p-1">password</p>
             <input class="mt-4" type="text" placeholder="password" id="password">
             <br>
-            <input class="mt-4 mb-2 btn btn-secondary" value="submit" type="button" id="login"> 
+            <input class="mt-4 mb-2 btn btn-secondary" value="submit" type="button" id="loginBtn"> 
             <br>
-            <input class="mt-4 mb-2 btn btn-primary float-end" value="register" type="button"> 
+            <input class="mt-4 mb-2 btn btn-primary float-end" value="register" type="button" id="registerBtn"> 
         </div>
 
-        <div class="container text-center w-75 mt-4 bg-dark" style="display: none;">
+        <div class="container text-center w-75 mt-4 bg-dark" style="display: none;" id="register">
             <h1 class="text-light">register</h1>
+            <div class="container text-center w-75 mt-4 bg-danger text-light" style="display: none;" id="usernameError"> username taken</div>
             <br>
             <p class="text-light d-inline border border-light p-1">username</p>
-            <input type="text " placeholder="username">
+            <input type="text " placeholder="username" id="rUsername">
             <br>
             <p class="text-light d-inline border border-light p-1">password</p>
-            <input class="mt-4" type="text" placeholder="password">
+            <input class="mt-4" type="text" placeholder="password" id="rPassword">
             <br>
-            <p class="text-light d-inline border border-light p-1">re password</p>
-            <input class="mt-4" type="text" placeholder="re password">
+            <p class="text-light d-inline border border-light p-1" >re password</p>
+            <input class="mt-4" type="text" placeholder="re password" id="rSecPassword">
             <br>
             <p class="text-light d-inline border border-light p-1">email</p>
-            <input class="mt-4" type="text" placeholder="email">
+            <input class="mt-4" type="text" placeholder="email"  id="email">
             <br>
             
-            <input class="mt-4 mb-2 btn btn-secondary" value="submit" type="button"> 
+            <input class="mt-4 mb-2 btn btn-secondary" value="submit" type="button" id="rSubmit"> 
         </div>
 
 
