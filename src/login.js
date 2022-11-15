@@ -33,6 +33,7 @@ document.getElementById("loginBtn").addEventListener("click",()=>{
     password=document.getElementById("password").value
     document.getElementById("username").value=''
     document.getElementById("password").value=''
+    users=[]
     checkUser(username,password,true)
 })
 
@@ -45,12 +46,7 @@ document.getElementById("registerBtn").addEventListener("click",()=>{
 document.getElementById("rSubmit").addEventListener("click",()=>{
     username=document.getElementById("rUsername").value
     password=document.getElementById("rPassword").value
-    secPassword=document.getElementById("rSecPassword").value
-    email=document.getElementById("email").value
-    document.getElementById("rUsername").value=''
-    document.getElementById("rPassword").value=''
-    document.getElementById("rSecPassword").value=''
-    document.getElementById("email").value=''
+    users=[]
     checkUser(username,password,false)
 })
 
@@ -71,23 +67,43 @@ function loginCheck(users,username,password){
     
 }
 
-function registerCheck(users,username){
+function registerCheck(users,username,password){
     for(let i=0;i<users.length;i++){
         if(users[i].name == username ){
             document.getElementById("usernameError").style.display="block"
-            check=true
-            break
-        }
-        else{
             check=false
-            document.getElementById("register").style.display="none"
-            document.getElementById("registerBtn").style.display="block"
-            document.getElementById("login").style.display="block"
+            document.getElementById("rUsername").value=''
+            document.getElementById("rPassword").value=''
+            document.getElementById("rSecPassword").value=''
+            document.getElementById("email").value=''
+            return;
         }
     }
+    secPassword=document.getElementById("rSecPassword").value
+    email=document.getElementById("email").value
+    if(password == secPassword & password != ''){ 
+        check=true
+        let docRef = addDoc(collection(db, "users"), {
+            name: username,
+            password: password,
+            email:email
+        });
+        console.log("Document written with ID: ", docRef.id);
+        document.getElementById("register").style.display="none"
+        document.getElementById("registerBtn").style.display="block"
+        document.getElementById("login").style.display="block"
+    }
+    else{
+        check=false
+        document.getElementById("rUsername").value=''
+        document.getElementById("rPassword").value=''
+        document.getElementById("rSecPassword").value=''
+        document.getElementById("email").value=''
+    }
     console.log(check)
-    
 }
+
+
 
 function checkUser(username,password,checkType){ 
     getDocs(collection(db, "users"))
@@ -98,7 +114,7 @@ function checkUser(username,password,checkType){
         if(checkType)
             loginCheck(users,username,password);
         else    
-            registerCheck(users,username);
+            registerCheck(users,username,password)
     })
     .catch((error)=>{
         console.log("the error is: " + error)
@@ -108,10 +124,7 @@ function checkUser(username,password,checkType){
 
 /*else{
     try {
-        const docRef = addDoc(collection(db, "users"), {
-          name: username,
-          password: password,
-        });
+        
         console.log("Document written with ID: ", docRef.id);
       } catch (e) {
         console.error("Error adding document: ", e);
