@@ -4,6 +4,16 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, queryEqual, exists, data } from "firebase/firestore";
 import { collection, getDocs , addDoc} from "firebase/firestore"; 
 
+import { getDatabase, ref, set, onValue } from "firebase/database";
+
+//realtime firebase building
+/*const realTimeConfig = {
+    // ...
+    // The value of `databaseURL` depends on the location of the database
+    databaseURL: "https://cavecar-f1011-default-rtdb.europe-west1.firebasedatabase.app",
+};
+const realTimeApp = initializeApp(realTimeConfig);*/
+
 // TODO: Replace the following with your app's Firebase project configuration
 // See: https://firebase.google.com/docs/web/learn-more#config-object
 const firebaseConfig = { 
@@ -14,7 +24,8 @@ const firebaseConfig = {
     storageBucket: "cavecar-f1011.appspot.com",
     messagingSenderId: "465966621561",
     appId: "1:465966621561:web:26a21fb466d53acf6fc5a8",
-    measurementId: "G-2DQE9E60FM"
+    measurementId: "G-2DQE9E60FM",
+    databaseURL: "https://cavecar-f1011-default-rtdb.europe-west1.firebasedatabase.app",
 }
 
 // Initialize Firebase
@@ -23,7 +34,7 @@ const app = initializeApp(firebaseConfig);
 
 // Initialize Cloud Firestore and get a reference to the service
 const db = getFirestore(app);
-
+const realTimeDB = getDatabase(app);
 //userinput
 let email,secPassword,username,password,check=false
 let users=[]
@@ -56,14 +67,19 @@ document.getElementById("rSubmit").addEventListener("click",()=>{
 function loginCheck(users,username,password){
     for(let i=0;i<users.length;i++){
         if(users[i].name == username && users[i].password==password){
-            check=true
-            break
+            set(ref(realTimeDB, 'user/' ), {
+                in:true,
+                id:users[i].id
+            })
+            .catch((error) => {
+                console.log(error)
+            }); 
+            break;
         }
         else{
             check=false
         }
     }
-    console.log(check)
     
 }
 

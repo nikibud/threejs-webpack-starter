@@ -187,6 +187,7 @@ const db = getFirestore(app);
 import { collection, getDocs , addDoc} from "firebase/firestore"; 
 
 let users=[]
+let caves=[]
 
 //userinput
 let username="test"
@@ -227,19 +228,25 @@ else{
 }
 
 
-printUsers()
-
-
-function printUsers(){
-    getDocs(collection(db, "users"))
+function caveOptions(){
+    getDocs(collection(db, "caves/"))
     .then((snapshot)=>{
-        users=[]
+        caves=[]
         snapshot.docs.forEach((doc)=>{
-            users.push({ ...doc.data(),id: doc.id})
+            caves.push({ ...doc.data()})
         })
-        console.log(users)
+        caves.forEach((cave)=>{
+            let option =document.createElement("option");
+            let caveName=document.createTextNode(cave.name);
+            option.value=cave.id
+            option.appendChild(caveName)
+            document.getElementById('caves').appendChild(option)
+        })
     })
     .catch((error)=>{
         console.log("the error is: " + error)
     });
 }
+caveOptions()
+
+
