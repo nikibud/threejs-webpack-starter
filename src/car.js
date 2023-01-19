@@ -19,11 +19,17 @@ document.getElementById("startDrive").addEventListener("click",()=>{
     if(drive){
         document.getElementById("startDrive").value="Start"
         drive=false;
+        set(ref(db, 'startDrive/' ), {
+            start:false ,
+        })
         Drive(drive)
     }
     else{
         document.getElementById("startDrive").value="Stop"
         drive=true;
+        set(ref(db, 'startDrive/' ), {
+            start:true ,
+        })
         Drive(drive)
     }
 });
