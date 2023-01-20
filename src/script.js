@@ -1,3 +1,28 @@
+
+
+
+//FIREBASE WORKPLACE    
+import { initializeApp } from "firebase/app";
+import { getFirestore, queryEqual, exists, data } from "firebase/firestore";
+import { collection, getDocs , addDoc} from "firebase/firestore"; 
+import { getDatabase, ref, set, onValue } from "firebase/database";
+
+// TODO: Replace the following with your app's Firebase project configuration
+// See: https://firebase.google.com/docs/web/learn-more#config-object
+const firebaseConfig = { 
+    apiKey: "AIzaSyDHZtE49cI69kCQa-tyw6XlAPHfRf0jiYw",
+    authDomain: "cavecar-f1011.firebaseapp.com",
+    databaseURL: "https://cavecar-f1011-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "cavecar-f1011",
+    storageBucket: "cavecar-f1011.appspot.com",
+    messagingSenderId: "465966621561",
+    appId: "1:465966621561:web:26a21fb466d53acf6fc5a8",
+    measurementId: "G-2DQE9E60FM"
+}
+
+
+
+//3D modeling
 import './style.css'
 import * as THREE from 'three'
 import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonControls.js'
@@ -20,9 +45,8 @@ var geometry = new THREE.TorusGeometry( .7, .2, 16, 100 );
 const material = new THREE.MeshBasicMaterial()
 material.color = new THREE.Color(0xff0000)
 // Mesh
-var sphere = new THREE.Mesh(geometry,material)
 var material1=new THREE.MeshBasicMaterial()
-var geometry1 = new THREE.TorusGeometry( .5, .2, 16, 100 );
+
 
 
 dat.GUI.toggleHide()
@@ -37,27 +61,27 @@ scene.add(camera)
 
 
 function buildTunle(map){
-    for(var i=-1.5;i<50;i+=0.25){
-        addTunle(i);
+    console.log(map)
+    for(var i=1;i<map.length+1;i++){
+        addTunle(i,map.hight,map.radius,map.engle);
     }
 }
 
 
 
-function addTunle(place){
-    if(place%0.5==0){
-        material1.color = new THREE.Color(0xfff000)
-        sphere = new THREE.Mesh(geometry1,material1)
-        sphere.rotation.y= 5
-        sphere.position.set(place,0,0)
-        scene.add(sphere)
-    }
-    else{
-        sphere = new THREE.Mesh(geometry,material)
-        sphere.rotation.y= 5
-        sphere.position.set(place,0,0)
-        scene.add(sphere)
-    }
+function addTunle(place, hight, radius, engle){
+    console.log(place)
+    material1.color = new THREE.Color(0xfff000)
+    var GeometrySphere = new THREE.TorusGeometry( radius, .2, 16, 100 );
+    var GeometryBox= new THREE.BoxGeometry(0.2,radius,(radius-hight))
+    var sphere = new THREE.Mesh(GeometrySphere,material1)
+    var Box= new THREE.Mesh(GeometryBox,material1)
+    sphere.rotation.y= engle
+    sphere.position.set(place,0,0)
+    //Box.rotation.y= engle
+    //Box.position.set(place,0,0)
+    scene.add(sphere)
+    scene.add(Box)
 }
 // Lights
 
@@ -155,27 +179,9 @@ tick()
 
 
 
+//firebase calls
 
 
-
-
-
-//FIREBASE WORKPLACE    
-import { initializeApp } from "firebase/app";
-import { getFirestore, queryEqual, exists, data } from "firebase/firestore";
-
-// TODO: Replace the following with your app's Firebase project configuration
-// See: https://firebase.google.com/docs/web/learn-more#config-object
-const firebaseConfig = { 
-    apiKey: "AIzaSyDHZtE49cI69kCQa-tyw6XlAPHfRf0jiYw",
-    authDomain: "cavecar-f1011.firebaseapp.com",
-    databaseURL: "https://cavecar-f1011-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "cavecar-f1011",
-    storageBucket: "cavecar-f1011.appspot.com",
-    messagingSenderId: "465966621561",
-    appId: "1:465966621561:web:26a21fb466d53acf6fc5a8",
-    measurementId: "G-2DQE9E60FM"
-}
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -183,52 +189,42 @@ const app = initializeApp(firebaseConfig);
 
 // Initialize Cloud Firestore and get a reference to the service
 const db = getFirestore(app);
-
-import { collection, getDocs , addDoc} from "firebase/firestore"; 
+const realTimeDB = getDatabase(app);
 
 let users=[]
 let caves=[]
 
 //userinput
-let username="test"
-let password="1234"
+var userIn
 
 
 
-function checkUser(username,password){ 
-    getDocs(collection(db, "users"))
-    .then((snapshot)=>{
-        users=[]
-        snapshot.docs.forEach((doc)=>{
-            users.push({ ...doc.data(),id: doc.id})
-        })
-        for(let i=0;i<users.length;i++){
-            if(users[i].name==username && users[i].password==password)    
-                return true
+function checkUser(){ 
+    onValue(ref(realTimeDB, "user/"),(snapshot)=>{
+        if(snapshot.val().in){
+            caveOptions(snapshot.val().id)
         }
     })
-    .catch((error)=>{
-        console.log("the error is: " + error)
+}
+
+checkUser()
+
+/*
+try {
+    
+    const docRef = addDoc(collection(db, "users"), {
+        name: username,
+        password: password,
     });
-}
-
-if(checkUser(username,password)){
-    console.log("hi")
-}
-else{
-    try {
-        const docRef = addDoc(collection(db, "users"), {
-          name: username,
-          password: password,
-        });
-        console.log("Document written with ID: ", docRef.id);
-      } catch (e) {
-        console.error("Error adding document: ", e);
-      }
-}
+    console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+    console.error("Error adding document: ", e);
+    }
+*/
 
 
-function caveOptions(){
+
+function caveOptions(userID){
     getDocs(collection(db, "caves/"))
     .then((snapshot)=>{
         caves=[]
@@ -236,17 +232,31 @@ function caveOptions(){
             caves.push({ ...doc.data()})
         })
         caves.forEach((cave)=>{
-            let option =document.createElement("option");
-            let caveName=document.createTextNode(cave.name);
-            option.value=cave.id
-            option.appendChild(caveName)
-            document.getElementById('caves').appendChild(option)
+            cave.usersID.forEach((id)=>{
+                if(id==userID)
+                {
+                    let option =document.createElement("option");
+                    let caveName=document.createTextNode(cave.name);
+                    option.value=cave.id
+                    option.appendChild(caveName)
+                    console.log(option.value)
+                    document.getElementById('caves').appendChild(option)
+                }
+
+            })
+            
         })
     })
     .catch((error)=>{
         console.log("the error is: " + error)
     });
 }
-caveOptions()
 
 
+document.getElementById("caves").addEventListener( "change",(selected)=>{
+    caves.forEach((cave)=>{
+        if(cave.id==selected.target.value){
+            buildTunle(cave.build)
+        }
+    })
+});
