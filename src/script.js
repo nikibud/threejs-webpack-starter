@@ -42,19 +42,19 @@ var geometry = new THREE.TorusGeometry( .7, .2, 16, 100 );
 
 // Materials
 
-const material = new THREE.MeshBasicMaterial()
-material.color = new THREE.Color(0xff0000)
-// Mesh
-var material1=new THREE.MeshBasicMaterial()
-
+const material = new THREE.MeshBasicMaterial({color: 0xffff00})
 
 
 dat.GUI.toggleHide()
 
 
 var camera = new THREE.PerspectiveCamera( 25, window.innerWidth / window.innerHeight, 1, 200 );
-camera.position.set(0,0,2)
+camera.position.set(0,0,14)
+camera.rotateX=0.5
+//camera.rotateY=0.5
 scene.add(camera)
+
+
 
 
 
@@ -62,34 +62,41 @@ scene.add(camera)
 
 function buildTunle(map){
     console.log(map)
-    for(var i=1;i<map.length+1;i++){
-        addTunle(i,map.hight,map.radius,map.engle);
+    for(var i=0;i<map.length;i++){
+        addTunle(i*-1,map[i].hight,map[i].radius,map[i].angle);
+        
     }
 }
 
 
 
-function addTunle(place, hight, radius, engle){
-    console.log(place)
-    material1.color = new THREE.Color(0xfff000)
-    var GeometrySphere = new THREE.TorusGeometry( radius, .2, 16, 100 );
-    var GeometryBox= new THREE.BoxGeometry(0.2,radius,(radius-hight))
-    var sphere = new THREE.Mesh(GeometrySphere,material1)
-    var Box= new THREE.Mesh(GeometryBox,material1)
-    sphere.rotation.y= engle
-    sphere.position.set(place,0,0)
-    //Box.rotation.y= engle
-    //Box.position.set(place,0,0)
-    scene.add(sphere)
+function addTunle(place, hight, radius, angle){
+
+    
+    var GeometryTorus = new THREE.TorusGeometry( radius, .2 , 16, 100,3.3 );
+    var GeometryBox= new THREE.BoxGeometry(radius*2,(hight),1)
+    var Torus = new THREE.Mesh(GeometryTorus,material)
+    var Box= new THREE.Mesh(GeometryBox,material)
+    console.log(angle)
+    Torus.rotation.y= (angle)*0.1
+    Torus.position.set(0,0.5,place)
+    Box.rotation.y= angle*0.1
+    Box.position.set(0,0,place)
+    console.log(Box.position  )
+    console.log(camera.position)
+
+    scene.add(Torus)
     scene.add(Box)
+    var pointLight = new THREE.PointLight(0xffffff, 0.1)
+    pointLight.position.x = place
+    pointLight.position.y = place+1
+    pointLight.position.z = place+2
+    scene.add(pointLight)
+    tick()
 }
 // Lights
 
-const pointLight = new THREE.PointLight(0xffffff, 0.1)
-pointLight.position.x = 2
-pointLight.position.y = 3
-pointLight.position.z = 4
-scene.add(pointLight)
+
 
 /**
  * Sizes
@@ -256,6 +263,8 @@ function caveOptions(userID){
 document.getElementById("caves").addEventListener( "change",(selected)=>{
     caves.forEach((cave)=>{
         if(cave.id==selected.target.value){
+            console.log(cave)
+            scene.remove.apply(scene, scene.children);
             buildTunle(cave.build)
         }
     })
