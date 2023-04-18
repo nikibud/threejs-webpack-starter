@@ -6,16 +6,7 @@ import { collection, getDocs , addDoc} from "firebase/firestore";
 
 import { getDatabase, ref, set, onValue } from "firebase/database";
 
-//realtime firebase building
-/*const realTimeConfig = {
-    // ...
-    // The value of `databaseURL` depends on the location of the database
-    databaseURL: "https://cavecar-f1011-default-rtdb.europe-west1.firebasedatabase.app",
-};
-const realTimeApp = initializeApp(realTimeConfig);*/
 
-// TODO: Replace the following with your app's Firebase project configuration
-// See: https://firebase.google.com/docs/web/learn-more#config-object
 const firebaseConfig = { 
     apiKey: "AIzaSyDHZtE49cI69kCQa-tyw6XlAPHfRf0jiYw",
     authDomain: "cavecar-f1011.firebaseapp.com",
