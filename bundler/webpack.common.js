@@ -42,6 +42,10 @@ module.exports = {
             template: path.resolve(__dirname, '../src/login.html'),
             chunks:['login']
         }),
+        new HtmlWebpackPlugin({
+            filename:'rock.jpg',
+            template: path.resolve(__dirname, '../src/img/rock.jpg'),
+        }),
         new MiniCSSExtractPlugin()
     ],
     module:

@@ -42,6 +42,8 @@ var geometry = new THREE.TorusGeometry( .7, .2, 16, 100 );
 
 // Materials
 
+const rockTexture = new THREE.TextureLoader().load();
+//map:rockTexture
 const material = new THREE.MeshBasicMaterial({color: 0xffff00})
 
 
@@ -63,7 +65,7 @@ scene.add(camera)
 function buildTunle(map){
     console.log(map)
     for(var i=0;i<map.length;i++){
-        addTunle(i*-1,map[i].hight,map[i].radius,map[i].angle);
+        addTunle(i*-0.3,map[i].hight,map[i].radius,map[i].angle);
         
     }
 }
@@ -76,6 +78,7 @@ function addTunle(place, hight, radius, angle){
     var GeometryTorus = new THREE.TorusGeometry( radius, .2 , 16, 100,3.3 );
     var GeometryBox= new THREE.BoxGeometry(radius*2,(hight),1)
     var Torus = new THREE.Mesh(GeometryTorus,material)
+
     var Box= new THREE.Mesh(GeometryBox,material)
     console.log(angle)
     Torus.rotation.y= (angle)*0.1
@@ -209,6 +212,7 @@ var userIn
 function checkUser(){ 
     onValue(ref(realTimeDB, "user/"),(snapshot)=>{
         if(snapshot.val().in){
+            console.log(snapshot.val().id)
             caveOptions(snapshot.val().id)
         }
     })

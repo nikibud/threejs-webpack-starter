@@ -36,11 +36,41 @@
                 </ul>
             </nav>
         </div>
-        <div><input class="btn btn-primary m-t-10px" type="button" value="Start" id="startDrive"></div>
+        
 
 
 
-
+        <div class="container text-center w-75 mt-4 bg-dark" >
+            <h1 id="title" class="text-light">Start Drive</h1>
+            <br>
+            <div  id="startDriveData" style="display: none;" >
+                <p class="text-light d-inline border border-light p-1">cave name</p>
+                <input type="text" placeholder="enter cave name" id="caveName">
+            </div>
+            
+            <div  id="DriveData" style="display: none;">
+                <div class="bg-info">
+                    <h2 > samples we got </h2>
+                    <h2 id="samplesPassed">0</h2>
+                </div>
+                <div class="bg-info">
+                    <h2 > the robot turned </h2>
+                    <h2 id="timesTurned">0</h2>
+                </div>
+                <div class="bg-info">
+                    <h2 > time on drive </h2>
+                    <h2 id="time">0:0</h2>
+                </div>
+                
+            </div>
+            <br>
+            <div id="startDriveBtn" style="display: none;"><input class="btn btn-primary " type="button" value="Start" id="startDrive" ></div>
+            <br>
+            <div class="bg-danger" style="display: none;" id="errorMassege" >
+                <h2>please enter cave name</h2>
+            </div>
+            <br>
+        </div>
 
 
 
