@@ -32,21 +32,33 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li class="nav-item " id="login">
                         <a class="nav-link pull-right" aria-current="page" href="login.html">login</a>
+                        
+                    </li>
+                    <li class="nav navbar-nav navbar-right" >
+                        <input class="btn btn-primary pull-right" value="logout" id="logout"  style="display: none;" >
                     </li>
                 </ul>
             </nav>
         </div>
-        <div class="row" style="text-align: center"> 
-            <div class="col-2" ><input class="btn btn-primary m-t-10px" type="button" value="movment Guide" id="movmentGuide"></div>
-            <div class="col-8 "> <canvas class="webgl"></canvas></div>
-            <div class="dropdown col-2" id="choose3DMap">
-                <select class="form-select" id="caves" aria-label="Default select example">
-                    <option selected >choose/option>
-                </select>
+        <div class="row mt-3" style="text-align: center"> 
+            <div> <canvas class="webgl"></canvas></div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                    <div class="dropdown row mt-3  d-flex justify-content-center" id="choose3DMap" >
+                        <select class="form-select w-25" id="caves" aria-label="Default select example">
+                            <option selected > choose/option>
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
         
+       
     </div>
+    
+    
     <script href="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
 </body>

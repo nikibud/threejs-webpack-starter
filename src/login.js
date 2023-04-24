@@ -4,7 +4,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, queryEqual, exists, data } from "firebase/firestore";
 import { collection, getDocs , addDoc} from "firebase/firestore"; 
 
-import { getDatabase, ref, set, onValue } from "firebase/database";
+import { getDatabase, ref, set, onValue ,get } from "firebase/database";
 
 
 const firebaseConfig = { 
@@ -29,6 +29,7 @@ const realTimeDB = getDatabase(app);
 //userinput
 let email,secPassword,username,password,check=false
 let users=[]
+checkUserIN()
 
 document.getElementById("loginBtn").addEventListener("click",()=>{
     username=document.getElementById("username").value
@@ -37,6 +38,7 @@ document.getElementById("loginBtn").addEventListener("click",()=>{
     document.getElementById("password").value=''
     users=[]
     checkUser(username,password,true)
+    
 })
 
 document.getElementById("registerBtn").addEventListener("click",()=>{
@@ -71,7 +73,8 @@ function loginCheck(users,username,password){
             check=false
         }
     }
-    
+    checkUserIN()
+    window.location.href = "home.html";
 }
 
 function registerCheck(users,username,password){
@@ -128,6 +131,29 @@ function checkUser(username,password,checkType){
     });
 
 }
+
+function checkUserIN(){
+    get(ref(realTimeDB, "user/")).then((snapshot)=>{
+        console.log(snapshot.val())
+        if(!snapshot.val().in){
+            document.getElementById("login").style="display:block";
+            document.getElementById("logout").style="display:none";
+        }
+        else{
+            document.getElementById("login").style="display:none";
+            document.getElementById("logout").style="display:block";
+        }
+    })
+}
+
+document.getElementById("logout").addEventListener("click",()=>{
+    console.log("logout")
+    
+    set(ref(realTimeDB, 'user/' ), {
+        id:0 ,
+        in:false
+    }).then(checkUserIN())
+});
 
 /*else{
     try {

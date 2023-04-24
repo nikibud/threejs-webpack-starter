@@ -8,6 +8,7 @@ module.exports = {
         map: path.resolve(__dirname, '../src/script.js'),
         login: path.resolve(__dirname, '../src/login.js'),
         car: path.resolve(__dirname, '../src/car.js'),
+        home: path.resolve(__dirname, '../src/home.js'),
     },
     output:
     {
@@ -31,6 +32,7 @@ module.exports = {
         new HtmlWebpackPlugin({
             filename:'home.html',
             template: path.resolve(__dirname, '../src/home.html'),
+            chunks:['home']
         }),
         new HtmlWebpackPlugin({
             filename:'car.html',

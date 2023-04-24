@@ -5,7 +5,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, queryEqual, exists, data } from "firebase/firestore";
 import { collection, getDocs , addDoc} from "firebase/firestore"; 
-import { getDatabase, ref, set, onValue } from "firebase/database";
+import { getDatabase, ref, set, onValue ,get } from "firebase/database";
 
 // TODO: Replace the following with your app's Firebase project configuration
 // See: https://firebase.google.com/docs/web/learn-more#config-object
@@ -206,8 +206,30 @@ let caves=[]
 
 //userinput
 var userIn
+checkUserIN()
 
+function checkUserIN(){
+    get(ref(realTimeDB, "user/")).then((snapshot)=>{
+        console.log(snapshot.val())
+        if(!snapshot.val().in){
+            document.getElementById("login").style="display:block";
+            document.getElementById("logout").style="display:none";
+        }
+        else{
+            document.getElementById("login").style="display:none";
+            document.getElementById("logout").style="display:block";
+        }
+    })
+}
 
+document.getElementById("logout").addEventListener("click",()=>{
+    console.log("logout")
+    
+    set(ref(realTimeDB, 'user/' ), {
+        id:0 ,
+        in:false
+    }).then(checkUserIN())
+});
 
 function checkUser(){ 
     onValue(ref(realTimeDB, "user/"),(snapshot)=>{
