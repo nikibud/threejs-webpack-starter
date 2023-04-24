@@ -2,7 +2,8 @@ import './style.css'
 
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, onValue, get } from "firebase/database";
-import { doc } from 'firebase/firestore';
+import { getFirestore, queryEqual, exists, data } from "firebase/firestore";
+import { collection, getDocs , addDoc} from "firebase/firestore"; 
 
 const firebaseConfig = {
     // ...
@@ -80,7 +81,7 @@ function Drive(){
             console.log(Date.now()+" - "+ startTime+ " = ");
             document.getElementById("time").innerHTML=`${min}:${sec}`
 
-            if(cave.length>=100){
+            /*if(cave.length>=100){
                 set(ref(db, 'startDrive/' ), {
                     start:0 ,
                 })
@@ -89,7 +90,7 @@ function Drive(){
                     name:cavename,
                     build:cave
                 });
-            }
+            }*/
         });
     }
     else{
