@@ -2,6 +2,19 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin')
 const path = require('path')
+const express = require('express')
+const app = express()
+
+// Serve static files from the "dist" directory
+app.use(express.static('src'))
+
+// Serve the "img" directory
+app.use('../src/img', express.static(path.join(__dirname, 'img')))
+
+// Start the server
+app.listen(8080, function() {
+  console.log('Server started on port 8080')
+})
 
 module.exports = {
     entry: { 
@@ -16,6 +29,11 @@ module.exports = {
         path: path.resolve(__dirname, '../dist')
     },
     devtool: 'source-map',
+    devServer: {
+        contentBase: path.join(__dirname, ''),
+        compress: true,
+        port: 8080
+    },    
     plugins:
     [
         new CopyWebpackPlugin({
@@ -44,10 +62,7 @@ module.exports = {
             template: path.resolve(__dirname, '../src/login.html'),
             chunks:['login']
         }),
-        new HtmlWebpackPlugin({
-            filename:'rock.jpg',
-            template: path.resolve(__dirname, '../src/img/rock.jpg'),
-        }),
+
         new MiniCSSExtractPlugin()
     ],
     module:

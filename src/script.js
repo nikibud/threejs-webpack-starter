@@ -1,5 +1,5 @@
 
-
+import rock from "./img/rock.jpg"
 
 //FIREBASE WORKPLACE    
 import { initializeApp } from "firebase/app";
@@ -42,18 +42,19 @@ var geometry = new THREE.TorusGeometry( .7, .2, 16, 100 );
 
 // Materials
 
-const rockTexture = new THREE.TextureLoader().load();
+const rockTexture = new THREE.TextureLoader().load(rock);
 //map:rockTexture
-const material = new THREE.MeshBasicMaterial({color: 0xffff00})
-
+const material1 = new THREE.MeshBasicMaterial({color: 0xffff00})
+const material = new THREE.MeshBasicMaterial({map:rockTexture,})
 
 dat.GUI.toggleHide()
 
 
 var camera = new THREE.PerspectiveCamera( 25, window.innerWidth / window.innerHeight, 1, 200 );
 camera.position.set(0,0,14)
-camera.rotateX=0.5
-//camera.rotateY=0.5
+const pointToLookAt = new THREE.Vector3(0, 0, 0);
+//camera.rotateX=0.5
+//camera.rotateY=0.75
 scene.add(camera)
 
 
@@ -63,39 +64,47 @@ scene.add(camera)
 
 
 function buildTunle(map){
+    camera.position.set(0,0,14)
+    controls.lookAt(pointToLookAt)
     console.log(map)
     for(var i=0;i<map.length;i++){
-        addTunle(i*-0.3,map[i].hight,map[i].radius,map[i].angle);
-        
+        addTunle(i,map[i].radius/2,map[i].hight,map[i].angle);
+        camera.position.set(0,1,(map.length+25))
     }
 }
 
 
 
-function addTunle(place, hight, radius, angle){
+function addTunle(place, radius, hight=1,  angle=1){
 
     
     var GeometryTorus = new THREE.TorusGeometry( radius, .2 , 16, 100,3.3 );
     var GeometryBox= new THREE.BoxGeometry(radius*2,(hight),1)
-    var Torus = new THREE.Mesh(GeometryTorus,material)
+    let newPlace
+    for(let j=0;j<=1;j++){
+        var Torus = new THREE.Mesh(GeometryTorus,material)
+        var Box= new THREE.Mesh(GeometryBox,material)
+        console.log(angle)
+        Torus.rotation.y= (angle)*0.1
+        Box.rotation.y= angle*0.1
+        newPlace=place+(-0.3*j)
+        Box.position.set(0,0,newPlace)
+        Torus.position.set(0,0.5,newPlace)
+        console.log(Box.position)
+        console.log(camera.position)
 
-    var Box= new THREE.Mesh(GeometryBox,material)
-    console.log(angle)
-    Torus.rotation.y= (angle)*0.1
-    Torus.position.set(0,0.5,place)
-    Box.rotation.y= angle*0.1
-    Box.position.set(0,0,place)
-    console.log(Box.position  )
-    console.log(camera.position)
+        scene.add(Torus)
+        scene.add(Box)
+        var pointLight = new THREE.PointLight(0xffffff, 0.1)
+        pointLight.position.x = newPlace
+        pointLight.position.y = newPlace+1
+        pointLight.position.z = newPlace+2
+        scene.add(pointLight)
+    }
+    
 
-    scene.add(Torus)
-    scene.add(Box)
-    var pointLight = new THREE.PointLight(0xffffff, 0.1)
-    pointLight.position.x = place
-    pointLight.position.y = place+1
-    pointLight.position.z = place+2
-    scene.add(pointLight)
     tick()
+    console.log("added tunnel")
 }
 // Lights
 
@@ -205,8 +214,8 @@ let users=[]
 let caves=[]
 
 //userinput
-var userIn
 checkUserIN()
+
 
 function checkUserIN(){
     get(ref(realTimeDB, "user/")).then((snapshot)=>{
@@ -261,8 +270,9 @@ function caveOptions(userID){
     getDocs(collection(db, "caves/"))
     .then((snapshot)=>{
         caves=[]
+        console.log(snapshot.docs)
         snapshot.docs.forEach((doc)=>{
-            caves.push({ ...doc.data()})
+            caves.push({ ...doc.data(), id:doc.id})
         })
         caves.forEach((cave)=>{
             cave.usersID.forEach((id)=>{
